@@ -164,3 +164,61 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
     messsage: "Logged out successfully",
   });
 });
+
+//Admin Routes
+
+//Get All Users => /api/v1/admin/users
+exports.allUsers = catchAsyncErrors(async (req, res, next) => {
+  const users = await User.find();
+  res.status(200).json({
+    success: true,
+    users,
+  });
+});
+
+//Get User Details => /api/v1/admin/user/:id
+exports.getUserDetails = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return next(new ErrorHandler(`User Not Fou With Id: ${req.params.id}`));
+  }
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+//Update User Profile   => /api/v1/admin/iser/:id
+exports.updateUser = catchAsyncErrors(async (req, res, next) => {
+  const newUserData = {
+    name: req.body.name,
+    email: req.body.email,
+    role: req.body.role,
+  };
+
+  const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+  res.status(200).json({
+    success: true,
+  });
+});
+
+//Delete User => /api/v1/admin/user/:id
+exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return next(new ErrorHandler(`User Not Fou With Id: ${req.params.id}`));
+  }
+
+  //Remove Avatar From Cloudinary - COMING SOON
+
+  await user.remove();
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
