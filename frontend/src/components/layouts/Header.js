@@ -2,8 +2,8 @@ import React from "react";
 
 const Header = () => {
   return (
-    <nav class="bg-neutral-900 border-gray-200 px-2 sm:px-4 py-2.5 dark:bg-gray-800">
-      <div class="container flex flex-wrap justify-between items-center mx-auto">
+    <nav class="bg-neutral-900 px-2 sm:px-4 py-3 dark:bg-gray-800 ">
+      <div class="container flex flex-wrap justify-between items-center mx-auto border-1 border-white">
         <a href="https://flowbite.com/" class="flex items-center">
           <img
             src="https://i.ibb.co/5GJwv63/b562efdbbf666e9e384275e3c9fe14cb-removebg-preview-crop.png"
