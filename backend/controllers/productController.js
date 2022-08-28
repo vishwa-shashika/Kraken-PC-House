@@ -5,8 +5,9 @@ const APIFeatures = require("../utils/apiFeatures");
 
 //Get All Products => api/v1/products===================================================================================
 exports.getProducts = catchAsyncErrors(async (req, res, next) => {
-  const resPerPage = 2; //Results Per Page
-  const productCount = await Product.countDocuments(); //Needed to Do Front-End Pagination (Show All Product Count)
+  //return next(new ErrorHandler("My Error", 400));  //Only to Test error toasts in front end
+  const resPerPage = 10000; //Results Per Page
+  const productsCount = await Product.countDocuments(); //Needed to Do Front-End Pagination (Show All Product Count)
 
   const apiFeatures = new APIFeatures(Product.find(), req.query)
     .search()
@@ -17,8 +18,8 @@ exports.getProducts = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    count: products.length,
-    productCount,
+    //count: products.length,  //Not Need Anymore
+    productsCount,
     products,
   });
 });

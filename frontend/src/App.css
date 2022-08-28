@@ -1,3 +1,33 @@
 body {
   background-color: rgb(229 229 229);
 }
+
+.custom-home-bg {
+  background-image: url(../public/background-main.jpg);
+  background-size: cover;
+  background-position: center;
+}
+
+.pagination_container li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  min-width: 45px;
+  padding: 10px 0;
+}
+
+.pagination_container li a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pagination_container li:hover {
+  background-color: #10b981;
+}
+
+.pagination_container li:last-child {
+  border-right: none;
+}
