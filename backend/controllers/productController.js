@@ -24,6 +24,16 @@ exports.getProducts = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+// Get all products (Admin)  =>   /api/v1/admin/products
+exports.getAdminProducts = catchAsyncErrors(async (req, res, next) => {
+  const products = await Product.find();
+
+  res.status(200).json({
+    success: true,
+    products,
+  });
+});
+
 //Get Single Product Detail => api/v1/products/:id======================================================================
 exports.getSingleProduct = catchAsyncErrors(async (req, res, next) => {
   const product = await Product.findById(req.params.id);
@@ -39,7 +49,7 @@ exports.getSingleProduct = catchAsyncErrors(async (req, res, next) => {
 //Create New Product => api/v1/admin/new ===============================================================================
 exports.newProduct = catchAsyncErrors(async (req, res, next) => {
   req.body.user = req.user.id;
-
+  console.log("New Product = ", req.body.product);
   const product = await Product.create(req.body);
   res.status(201).json({
     success: true,

@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+// import Slider from "rc-slider"
+// import 'rc-slider/assets/index.css';
 import { Triangle } from "react-loader-spinner";
-
 import ReactPaginate from "react-paginate";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -12,6 +12,9 @@ import MetaData from "./layouts/MetaData";
 import { getProducts } from "../actions/productActions";
 import Product from "./product/Product.js";
 import SideBar from "./SideBar";
+
+import { GiComputerFan } from "react-icons/gi";
+import { Link } from "react-router-dom";
 
 const items = [
   "PROCESSORS",
@@ -25,7 +28,25 @@ const items = [
   "OTHERS",
 ];
 
-const Home = () => {
+const Home = ({ match }) => {
+  //const [price, setPrice] = useState([100,800000])  //Price Slider Will Not Implemented
+  const [category, setCategory] = useState("");
+  const categories = [
+    "Processors",
+    "Graphic Cards",
+    "Mother Boards",
+    "RAM",
+    "HDD",
+    "SSD",
+    "Power Supply",
+    "Casings",
+    "Coolers",
+    "Pre-Builts",
+    "Flash Drives",
+    "Laptops",
+    "Others",
+  ];
+
   const notify = (msg) =>
     toast.error(msg, {
       theme: "light",
@@ -36,16 +57,18 @@ const Home = () => {
     (state) => state.products
   );
 
+  const keyword = match.params.keyword;
+
   console.log(productsCount, products, error, loading);
 
   useEffect(() => {
     if (error) {
       return notify(error);
     }
-    dispatch(getProducts());
-  }, [dispatch, error]);
+    dispatch(getProducts(keyword, category));
+  }, [dispatch, error, keyword, category]);
 
-  //Pagination Related Code
+  //Pagination Related Code===================================
   const [pageNumber, setPageNumber] = useState(0);
   const productsPerPage = 10;
   const pagesVisited = pageNumber * productsPerPage;
@@ -73,34 +96,56 @@ const Home = () => {
         }`}
       >
         {/*SideBard Content=============*/}
-        <SideBar items={items} />
+        <div className="w-64 text-zinc-100 bg-zinc-900 shadow-2xl">
+          <div className="h-32 px-4 flex flex-col justify-center items-center font-semibold text-lg border-l-8 border-l-emerald-900 bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500">
+            <Link
+              to="/pc-builder"
+              className="relative text-zinc-100 text-center"
+            >
+              TRY OUR NEW PC BUILDER
+              <div className="absolute top-[-2px] right-[-12px] w-3 h-3 rounded-full bg-yellow-500"></div>
+              <div className="absolute top-[-2px] right-[-12px] w-3 h-3 rounded-full bg-yellow-500 animate-ping"></div>
+            </Link>
+          </div>
+
+          <div
+            onClick={() => setCategory("")}
+            className="h-12 px-4 flex items-center bg-zinc-900 group relative overflow-hidden"
+          >
+            {category == "" ? (
+              <div className="z-0 absolute h-12 bg-gradient-to-r  from-emerald-500 to-green-500 top-0 left-0 w-[17rem] visible border-l-8 border-l-emerald-900  "></div>
+            ) : (
+              <div className="z-0 absolute h-12 w-0 bg-gradient-to-r  from-emerald-500 to-green-500 top-0 left-0 group-hover:w-[17rem] group-hover:visible group-hover:border-l-8 group-hover:border-l-emerald-900 group-hover:cursor-pointer  transition-all ease-in-out duration-200"></div>
+            )}
+            <div className="z-10 group-hover:cursor-pointer">
+              {"All Products"}
+            </div>
+          </div>
+
+          {categories.map((cat) => {
+            return (
+              <div
+                onClick={() => setCategory(cat)}
+                className="h-12 px-4 flex items-center bg-zinc-900 border-b-2 border-black group relative overflow-hidden"
+                key={cat}
+              >
+                {category == cat ? (
+                  <div className="z-0 absolute h-12 bg-gradient-to-r  from-emerald-500 to-green-500 top-0 left-0 w-[17rem] visible border-l-8 border-l-emerald-900  "></div>
+                ) : (
+                  <div className="z-0 absolute h-12 w-0 bg-gradient-to-r  from-emerald-500 to-green-500 top-0 left-0 group-hover:w-[17rem] group-hover:visible group-hover:border-l-8 group-hover:border-l-emerald-900 group-hover:cursor-pointer  transition-all ease-in-out duration-200"></div>
+                )}
+                <div className="z-10 group-hover:cursor-pointer flex items-center gap-2">
+                  <GiComputerFan />
+                  {cat}
+                </div>
+              </div>
+            );
+          })}
+        </div>
 
         {/*Main Conent Area=========*/}
         <div className="BACKGROUND-IMAGE-CONTAINER custom-home-bg w-full relative">
           <div className="grid grid-cols-4 gap-5 px-4 mx-auto pt-5 pb-24">
-            {/*Single Card=============================================================================================*/}
-            <div className="w-72 h-96 py-2 border-4 border-zinc-500 shadow-lg flex flex-col items-stretch group overflow-hidden relative transition ease-in-out hover:scale-105 duration-300">
-              <div className="z-0 absolute h-2 w-2 rounded-full bg-gradient-to-r from-emerald-500 to-green-500 top-1/2 left-1/2 group-hover:scale-[6000%] group-hover:visible transition ease-in-out duration-300"></div>
-
-              <img
-                src="https://i.ibb.co/TR0qkD6/827-20220429161718-nx290-pdt01.png"
-                alt=""
-                className="object-contain h-56 w-auto z-10"
-              />
-              <div className="font-bold text-xl bg-zinc-500 flex justify-center mt-4 py-2 z-10 text-zinc-100">
-                INTEL CORE I5-10400F
-              </div>
-              <div className="flex justify-center font-semibold text-lg mt-2 z-10 text-zinc-100 group-hover:text-zinc-900 group-hover:border-zinc-900 transition ease-in-out duration-300">
-                - LKR 54000.00 -
-              </div>
-              <div className="text-xs font-semibold flex justify-center mt-2 z-10">
-                <div className="border-2 border-green-500 text-green-500 py-0.5 px-1 group-hover:text-zinc-900 group-hover:border-zinc-900 transition ease-in-out duration-300">
-                  IN STOCK
-                </div>
-              </div>
-            </div>
-            {/*Card Ends=============================================================================================*/}
-
             {/*Card Loop=============================================================================================*/}
             {loading ? (
               <div className="absolute top-0 left-0 w-[100vw] h-[calc(100vh-4rem)] bg-zinc-900/[.8] z-[100] flex justify-center items-center">
